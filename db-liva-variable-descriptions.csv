@@ -1,0 +1,11 @@
+﻿Variable,Type,Max-length,Description
+gvkey,CHAR,6,Compustat company identifier
+year,NUM,,Calendar year
+conm,CHAR,33,Company name (from Compustat)
+loc,CHAR,3,Current ISO country code - Headquarters
+gsubind,NUM,,8-digit GICS sub-industry code
+liva,NUM,,"LIVA for the given gvkey-year pair in 000,000,000 USD"
+ler,NUM,,"Logarithmic excess return for the given gvkey-year pair, defined by log(1 + company TSR) - log(1 + market TSR)"
+mcbeg,NUM,,"Beginning of year market capitalization in 000,000,000 USD"
+mcend,NUM,,"End of year market capitalization in 000,000,000 USD"
+nmo,NUM,,Number of months of data available and used for LIVA calculation

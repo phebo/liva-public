@@ -34,3 +34,11 @@ vignettes/*.pdf
 
 # Shiny token, see https://shiny.rstudio.com/articles/shinyapps.html
 rsconnect/
+.Rproj.user
+
+# LIVA project specific files
+db-liva.csv
+db-compustat-global-security.csv
+db-compustat-na-security.csv
+db-G_EXRT_DLY.csv
+liva-public.Rproj

@@ -1,0 +1,20 @@
+NA,Global,Merge,Criteria,Description
+gvkey,gvkey,,,Compustat identifier
+iid,iid,,,Issue identifier
+datadate,datadate,,,yyyymmdd
+conm,conm,,,Company name
+ajexm,ajexdi,ajex,,Adjustment factor (stock splits etc.)
+curcdm,curcdd,curcd,,Currency
+prccm,prccd,prcc,,Close price
+trfm,trfd,trf,,Total return factor
+trt1m,,,,1 month total return (as check)
+cshom,cshoc,csho, > 0,Shares outstanding
+exchg,exchg,,,Stock exchange code
+fic,fic,,,Country: incorporation
+gsubind,gsubind,,,GICS 8-digit
+loc,loc,,,Country: headquarters
+stko,stko,,,"Stock ownership code (0 = publicly traded, 3 = OTC)"
+primiss,,," = ""P""",Primary/joinder issue flag
+,monthend,, = 1,End of month only (to build monthly database)
+tpci,tpci,," = ""0""",Issue type code (0 = ordinary)
+,qunit,, = 1,"Unit quotes <> 1 sometimes have data integrity issues (e.g., incorrect adjustment factors)"
