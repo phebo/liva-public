@@ -1,7 +1,10 @@
 # "Shiny" web app as published on www.liva-measure.com
 # This app needs the Global LIVA database as input in the file db-liva.csv
-# This file can be downloaded from WRDS (Wharton Research Data Services), or generated using the script build-liva-dbase.R
-# It also needs the db-gics.csv and db-countries.csv files that are included in this repository
+# This file can be obtained through either of the following methods:
+# - using the script download-liva-dbase.R to download from the WRDS database
+# - directly downloaded from www.liva-measure.com 
+# - generated using the script build-liva-dbase.R
+# The app also needs the db-gics.csv and db-countries.csv files that are included in this repository
 
 # Copyright (C) 2019, Phebo Wibbens and Nicolaj Siggelkow
   
