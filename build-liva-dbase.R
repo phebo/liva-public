@@ -1,12 +1,13 @@
 # This script generates the global LIVA database and can be adapted to create a custom LIVA database
-# The following input files need to be supplied, e.g. from WRDS (Wharton Research Data Services):
+# The following input files need to be supplied:
 # - db-compustat-na-security.csv: Compustat NA Security database (monthly)
 # - db-compustat-global-security.csv: Compustat Global Security database (daily, with end-of-month data only)
 # - db-G_EXRT_DLY.csv: Compustat daily exchange rate database
+# They can be either created using the download-compustat-data script or downloaded manualy (e.g. from WRDS)
 # Please see the file db-compustat-variables.csv for an overview of the variables needed and selection criteria used
 # The file db-liva-variable-descriptions.csv contains an overview of the variables in the resulting database
 
-# Copyright (C) 2019, Phebo Wibbens and Nicolaj Siggelkow
+# Copyright (C) 2019-2021, Phebo Wibbens and Nicolaj Siggelkow
 
 #   This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -25,14 +26,14 @@
 library(tidyverse)
 
 minMc <- 0.1  # (in USD B) Include only companies wich have reached market cap of >$100M at any point in their history
-years <- c(1999, 2018)  # Both years inclusive
+years <- c(1999, 2020)  # Both years inclusive
 baseYr <- 2018 # Base year for discounting LIVA (uses end-of-year); this changes all LIVAs by a constant factor
-excludeCompanies <- c("123916", "033625", "181283", "313077", "290168", "015520") # GVKEYs of companies with data integrity issues
+excludeCompanies <- c("123916", "033625", "181283", "313077", "290168", "015520", "034290") # GVKEYs of companies with data integrity issues
 excludeCountries <- c("ZWE", "BRA", "VEN", "ARG") # Countries with data integrity issues (e.g. due to hyper-inflation)
 
 # Read files, adjust path names as necessary
-dfNA <- read_csv("db-compustat-na-security.csv", col_types = cols(prican = "c", prirow = "c"))  # Compustat NA security monthly
-dfGlobal <- read_csv("db-compustat-global-security.csv", col_types = cols(prican = "c")) # Compustat Global security daily
+dfNA <- read_csv("db-compustat-na-security.csv")  # Compustat NA security monthly
+dfGlobal <- read_csv("db-compustat-global-security.csv") # Compustat Global security daily
 dfFx <- read_csv("db-G_EXRT_DLY.csv", col_types = cols(exrattpd = "c"))  # Compustat currency conversion daily
 
 # Make currency conversion to USD
@@ -45,20 +46,21 @@ dfFx <- dfFx %>% filter(tocurd == "USD") %>% select(datadate, usd = exratd) %>%
 df <- bind_rows(dfNA %>% rename(curcd = curcdm, prcc = prccm, trf = trfm, csho = cshom, ajex = ajexm),
                 dfGlobal %>% rename(curcd = curcdd, prcc = prccd, trf = trfd, csho = cshoc, ajex = ajexdi))
 df <- inner_join(df, dfFx)
+df$date <- if(class(df$datadate) == "Date") df$datadate else as.Date(as.character(datadate), format = "%Y%m%d")
+
 df <- df %>%
   filter(
     !gvkey %in% excludeCompanies, 
     !loc %in% excludeCountries, 
     !is.na(prcc + ajex + trf),
     pmin(prcc, ajex, trf) >= 0.01,  # To prevent rounding issues
-    datadate >= (years[1] - 1) * 1e4 + 1200,
-    datadate < (years[2] + 1) * 1e4) %>%
+    date >= as.Date(paste(years[1]-1, 12, 1, sep="-")),
+    date <= as.Date(paste(years[2], 12, 31, sep="-"))) %>%
   mutate(
     prc = prcc / usdconv,
     mcend = prc * csho / 1e9,
-    month = datadate %/% 100,
-    year = datadate %/% 1e4,
-    date = as.Date(as.character(datadate), format = "%Y%m%d"))
+    month = as.numeric(format(date,"%Y%m")),
+    year = as.numeric(format(date,"%Y")))
 dfCo <- df %>% group_by(gvkey) %>% summarize(mc=max(mcend)) %>% filter(mc >= minMc)
 df <- df %>%
   filter(gvkey %in% dfCo$gvkey) %>%
@@ -124,10 +126,7 @@ dfCo <- dfCoYr %>% group_by(gvkey) %>% summarize(
 ) %>% arrange(-liva) %>%
   mutate(
     cumliva = cumsum(liva),
-    rank = row_number()
-    )
+    rank = row_number())
 
 # Write database to CSV file
 write_csv(dfCoYr, "db-liva.csv")
-
-

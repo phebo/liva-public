@@ -1,6 +1,6 @@
 # This script downloads the global LIVA database from WRDS (Wharton Research Data Services) 
 
-# Copyright (C) 2019, Phebo Wibbens and Nicolaj Siggelkow
+# Copyright (C) 2019-2021, Phebo Wibbens and Nicolaj Siggelkow
 
 #   This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by

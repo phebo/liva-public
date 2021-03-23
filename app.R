@@ -6,7 +6,7 @@
 # - generated using the script build-liva-dbase.R
 # The app also needs the db-gics.csv and db-countries.csv files that are included in this repository
 
-# Copyright (C) 2019, Phebo Wibbens and Nicolaj Siggelkow
+# Copyright (C) 2019-2021, Phebo Wibbens and Nicolaj Siggelkow
   
 #   This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -21,7 +21,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-
 library(shiny)
 library(tidyverse)
 
@@ -30,7 +29,7 @@ dfGics <- read_csv("db-gics.csv")
 dfLoc <- read_csv("db-countries.csv")
 
 df <- left_join(df %>% mutate(gics4d = gsubind %/% 1e4),
-                 dfGics %>% select(gics4d, sector))
+                dfGics %>% select(gics4d, sector))
 df <- left_join(df, dfLoc)
 df <- df %>% mutate(sector = ifelse(is.na(gics4d), "Not recorded", sector)) %>%
   mutate(gics4d = ifelse(is.na(gics4d), 9999, gics4d)) %>%
@@ -52,14 +51,18 @@ ui <- fluidPage(
   titlePanel("Top and bottom performers in the global LIVA database"),
   sidebarLayout(
     sidebarPanel(
-      sliderInput("years", "Total over all years from / to", min = years[1], max = years[2], value = years, sep=""),
+      sliderInput("years", "Total over all years from / to", min = years[1], max = years[2], value = c(years[2]-19, years[2]), sep=""),
+      #checkboxGroupInput("active", "Only include companies active in", c("First year" = "first", "Last year" = "last"), inline=T),
       selectInput("country", "Country", countries),
       selectInput("sector", "Sector", sectors),
       radioButtons("show", "Show", c("Companies", "Countries", "Sectors")),
       checkboxInput("table", "Add table below chart"),
-      sliderInput("nco", "Max number of items to show", min = 10, max = 100, value = 40, step=10),
+      sliderInput("nco", "Maximum number of rows", min = 10, max = 100, value = 20, step=10),
       textInput("search", "Text search"),
-      p(tags$small(HTML("&copy 2019 Phebo Wibbens and Nicolaj Siggelkow")))
+      #p(tags$small("*Statutory headquarter location.")),
+      #p(tags$small("**Sector based on 4-digit GICS classification.")),
+      #p(tags$small("Source: Wibbens & Siggelkow 2019; WRDS; Compustat")),
+      p(tags$small(HTML("&copy 2019-2021 Phebo Wibbens and Nicolaj Siggelkow")))
     ),
     mainPanel(plotOutput("plot", inline=T),
               tableOutput("table"))
@@ -74,7 +77,9 @@ server <- function(input, output) {
     dfSum <- dfSub %>% group_by(gvkey) %>%
       summarize(conm=last(conm), liva = sum(liva), first=first(year), last=last(year),
                 country=last(country), sector = last(sector))
-
+    #if("first" %in% input$active) dfSum <- dfSum %>% filter(first == input$years[1])
+    #if("last" %in% input$active) dfSum <- dfSum %>% filter(last == input$years[2])
+    
     if(input$show == "Countries") {
       dfSum <- dfSum %>% group_by(name = country) %>% summarize(liva = sum(liva), nco = n())
     } else if(input$show == "Sectors") {
@@ -83,7 +88,7 @@ server <- function(input, output) {
       dfSum <- dfSum %>% mutate(name = convString(conm)) %>% group_by(name) %>%
         summarize(conm=last(conm), liva = sum(liva), first=first(first), last=last(last),
                   country=last(country), sector = last(sector))
-          # This allows for multiple gvkeys with same name to be combined, e.g. SK Holdings Co Ltd (gvkeys 209610 and 293194)
+      # This allows for multiple gvkeys with same name to be combined, e.g. SK Holdings Co Ltd (gvkeys 209610 and 293194)
     }
     if(input$search != "") dfSum <- dfSum %>% filter(grepl(input$search, name, ignore.case = TRUE))
     if(nrow(dfSum) > input$nco) {
@@ -101,7 +106,7 @@ server <- function(input, output) {
       theme(text = element_text(size=18))
     if("tb" %in% names(dfSum)) ggOut <- ggOut + facet_grid(tb ~ ., scales = "free_y")
     ggOut
-  }, height = function() {dfSum <- newData(); 150 + 15 * nrow(dfSum)},
+  }, height = function() {dfSum <- newData(); 250 + 16 * nrow(dfSum)},
   width = 550)
   
   output$table <- renderTable({
