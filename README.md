@@ -13,7 +13,7 @@ Recreating the database from scratch can also be useful for replication or under
 2. Build the LIVA database using the [build-liva-dbase.R](build-liva-dbase.R) script. This should not take more than a few minutes on a regular PC.
 The LIVA database in this repo was created using the two scripts mentioned above.
 
-C. Adapt the web app in the script [app.R](app.R). A working version of the app is posted on https://phebo.shinyapps.io/liva-public/.
+C. Adapt the web app in the script [app.R](app.R). This is the code behind the app on https://phebo.shinyapps.io/liva-public/.
 
 For more information see www.liva-measure.com.
 Scientific methods and background can be found in Wibbens, P. D., & Siggelkow, N. (2020). Introducing LIVA to measure long‐term firm performance. *Strategic Management Journal*, 41(5), 867-890.
