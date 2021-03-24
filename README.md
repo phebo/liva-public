@@ -3,7 +3,7 @@ R code to create and use the global LIVA database and web app.
 There are a couple of different ways to use this repository:
 
 A. Download the complete global LIVA database 1999-2011 from the following files:
-- [db-liva.csv](db-liva.csv) : LIVA by company-year ([direct download](https://raw.githubusercontent.com/phebo/liva-public/master/db-liva.csv))
+- [db-liva.csv](db-liva.csv) : LIVA by company-year ([direct download](https://raw.githubusercontent.com/phebo/liva-public/master/db-liva.csv)); see [variable descriptions](db-liva-variable-descriptions.csv)
 - [db-gics.csv](db-gics.csv) : Description of GICS codes ([direct download](https://raw.githubusercontent.com/phebo/liva-public/master/db-gics.csv))
 - [db-countries.csv](db-countries.csv) : Description of country codes ([direct download](https://raw.githubusercontent.com/phebo/liva-public/master/db-countries.csv))
 
