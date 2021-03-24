@@ -27,7 +27,7 @@ library(tidyverse)
 
 minMc <- 0.1  # (in USD B) Include only companies wich have reached market cap of >$100M at any point in their history
 years <- c(1999, 2020)  # Both years inclusive
-baseYr <- 2018 # Base year for discounting LIVA (uses end-of-year); this changes all LIVAs by a constant factor
+baseYr <- 2018 # Base year for discounting LIVA (end-of-year); changing this affects all LIVAs by a constant factor
 excludeCompanies <- c("123916", "033625", "181283", "313077", "290168", "015520", "034290") # GVKEYs of companies with data integrity issues
 excludeCountries <- c("ZWE", "BRA", "VEN", "ARG") # Countries with data integrity issues (e.g. due to hyper-inflation)
 
@@ -52,7 +52,7 @@ df <- df %>%
   filter(
     !gvkey %in% excludeCompanies, 
     !loc %in% excludeCountries, 
-    !is.na(prcc + ajex + trf),
+    !is.na(prcc + ajex + trf + csho),
     pmin(prcc, ajex, trf) >= 0.01,  # To prevent rounding issues
     date >= as.Date(paste(years[1]-1, 12, 1, sep="-")),
     date <= as.Date(paste(years[2], 12, 31, sep="-"))) %>%
@@ -108,7 +108,7 @@ dfCoYr <- df %>% group_by(gvkey, year) %>% summarize(
   mcend = last(mcend),
   nmo = n()
 ) %>% ungroup()
-stopifnot(all(abs((dfCoYr %>% group_by(year) %>% summarize(liva = sum(liva)))$liva) < 1e-10)) # LIVA for each month should be 0
+stopifnot(all(abs((dfCoYr %>% group_by(year) %>% summarize(liva = sum(liva)))$liva) < 1e-10)) # LIVA for each year should be 0
 
 dfCo <- dfCoYr %>% group_by(gvkey) %>% summarize(
   conm = last(conm),
