@@ -7,6 +7,8 @@ There are a couple of different ways to use this repository:
 - [db-gics.csv](db-gics.csv) : Description of GICS codes ([direct download](https://raw.githubusercontent.com/phebo/liva-public/master/db-gics.csv))
 - [db-countries.csv](db-countries.csv) : Description of country codes ([direct download](https://raw.githubusercontent.com/phebo/liva-public/master/db-countries.csv))
 
+See [db-liva-variable-descriptions.csv](db-liva-variable-descriptions.csv) for variable descriptions.
+
 **B. Recreate the database**, for instance to build it with a different set of countries / time periods, or with different parameters / methods.
 Recreating the database from scratch can also be useful for replication or understanding the precise methodology used. Recreation requires two steps:
 1. Download the security information from the Compustat NA and Global databases. This can be done either with the script [download-compustat-data.R](download-compustat-data.R) directly accessing the WRDS (Wharton Research Data Services) cloud (make sure to follow the WRDS set-up instructions and add your WRDS username), or manually based on the variables outlined in the file [db-compustat-variables.csv](db-compustat-variables.csv).
