@@ -6,7 +6,7 @@
 # - generated using the script build-liva-dbase.R
 # The app also needs the db-gics.csv and db-countries.csv files that are included in this repository
 
-# Copyright (C) 2019-2021, Phebo Wibbens and Nicolaj Siggelkow
+# Copyright (C) 2019-2022, Phebo Wibbens and Nicolaj Siggelkow
   
 #   This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -62,7 +62,7 @@ ui <- fluidPage(
       #p(tags$small("*Statutory headquarter location.")),
       #p(tags$small("**Sector based on 4-digit GICS classification.")),
       #p(tags$small("Source: Wibbens & Siggelkow 2019; WRDS; Compustat")),
-      p(tags$small(HTML("&copy 2019-2021 Phebo Wibbens and Nicolaj Siggelkow")))
+      p(tags$small(HTML("&copy 2019-2022 Phebo Wibbens and Nicolaj Siggelkow")))
     ),
     mainPanel(plotOutput("plot", inline=T),
               tableOutput("table"))
