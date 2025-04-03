@@ -7,7 +7,7 @@
 # Please see the file db-compustat-variables.csv for an overview of the variables needed and selection criteria used
 # The file db-liva-variable-descriptions.csv contains an overview of the variables in the resulting database
 
-# Copyright (C) 2019-2022, Phebo Wibbens and Nicolaj Siggelkow
+# Copyright (C) 2019-2024, Phebo Wibbens and Nicolaj Siggelkow
 
 #   This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,10 +26,10 @@
 library(tidyverse)
 
 minMc <- 0.1  # (in USD B) Include only companies wich have reached market cap of >$100M at any point in their history
-years <- c(1999, 2021)  # Both years inclusive
+years <- c(1999, 2024)  # Both years inclusive
 baseYr <- 2018 # Base year for discounting LIVA (end-of-year); changing this affects all LIVAs by a constant factor
 excludeCompanies <- c("123916", "033625", "181283", "313077", "290168", "015520", "034290",
-                      "201355", "170818", "250484") # GVKEYs of companies with data integrity issues
+                      "201355", "170818", "250484", "024584") # GVKEYs of companies with data integrity issues
 excludeCountries <- c("ZWE", "BRA", "VEN", "ARG") # Countries with data integrity issues (e.g. due to hyper-inflation)
 
 # Read files, adjust path names as necessary

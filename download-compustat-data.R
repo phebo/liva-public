@@ -1,7 +1,7 @@
 # This script downloads the Compustat databases from WRDS (Wharton Research Data Services)
 # These databases are the input for creating the global LIVA database
 
-# Copyright (C) 2019-2022, Phebo Wibbens and Nicolaj Siggelkow
+# Copyright (C) 2019-2025, Phebo Wibbens and Nicolaj Siggelkow
 
 #   This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@ wrds <- dbConnect(Postgres(), host='wrds-pgdata.wharton.upenn.edu', port=9737, d
 res <- dbSendQuery(wrds, "select gvkey,iid,datadate,ajexm,curcdm,prccm,trfm,trt1m,cshom,exchg,fic
                           from comp.secm
                           where primiss = 'P' and tpci = '0' and cshom > 0 and
-                            datadate between '1998-12-01' and '2022-01-01'")
+                            datadate between '1998-12-01' and '2025-01-01'")
 dfNASec <- dbFetch(res, n=-1)
 dbClearResult(res)
 
@@ -39,7 +39,7 @@ dbClearResult(res)
 res <- dbSendQuery(wrds, "select gvkey,iid,datadate,ajexdi,curcdd,prccd,trfd,cshoc,exchg,fic
                           from comp.g_secd
                           where monthend = 1 and tpci = '0' and qunit = 1 and
-                            datadate between '1998-12-01' and '2022-01-01'")
+                            datadate between '1998-12-01' and '2025-01-01'")
 dfGlobalSec <- dbFetch(res, n=-1)
 dbClearResult(res)
 

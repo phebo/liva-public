@@ -62,7 +62,7 @@ ui <- fluidPage(
       #p(tags$small("*Statutory headquarter location.")),
       #p(tags$small("**Sector based on 4-digit GICS classification.")),
       #p(tags$small("Source: Wibbens & Siggelkow 2019; WRDS; Compustat")),
-      p(tags$small(HTML("&copy 2019-2022 Phebo Wibbens and Nicolaj Siggelkow")))
+      p(tags$small(HTML("&copy 2019-2025 Phebo Wibbens and Nicolaj Siggelkow")))
     ),
     mainPanel(plotOutput("plot", inline=T),
               tableOutput("table"))
